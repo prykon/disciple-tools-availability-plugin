@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
  * Configures the site link system for the network reporting
  */
 
-class DT_Starter_Plugin_Site_Links {
-    public $type = 'dt_starter_plugin';
+class DT_Calendar_Plugin_Site_Links {
+    public $type = 'dt_Calendar_Plugin';
 
     private static $_instance = null;
     public static function instance() {
@@ -33,9 +33,9 @@ class DT_Starter_Plugin_Site_Links {
     }
 
     public function site_link_type( $type ) {
-        $type[$this->type] = __( 'Starter Plugin' );
+        $type[$this->type] = __( 'Availability Plugin' );
         return $type;
     }
 }
-DT_Starter_Plugin_Site_Links::instance();
+DT_Calendar_Plugin_Site_Links::instance();
 

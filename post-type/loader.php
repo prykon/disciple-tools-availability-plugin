@@ -17,12 +17,12 @@ if ( ! class_exists( 'DT_Module_Base' ) ) {
  */
 add_filter( 'dt_post_type_modules', function( $modules ){
     $modules["starter_base"] = [
-        "name" => "Starter",
+        "name" => "Availability",
         "enabled" => true,
         "locked" => true,
         "prerequisites" => [ "contacts_base" ],
         "post_type" => "starter_post_type",
-        "description" => "Default starter functionality"
+        "description" => "Availability starter functionality"
     ];
     return $modules;
 }, 20, 1 );
