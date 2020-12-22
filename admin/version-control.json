@@ -1,14 +1,14 @@
 {
   "name": "Disciple Tools - Availability Plugin",
   "version": "0.1.0",
-  "download_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/releases/latest/download/disciple-tools-availability-plugin.zip",
+  "download_url": "https://github.com/prykon/dt-availability-plugin/archive/master.zip",
   "sections": {
     "description": "Disciple Tools - Availability Plugin.",
     "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
     "changelog": ""
   },
   "last_updated": "2020-1-24",
-  "upgrade_notice": "Here's why you should upgrade...",
+  "upgrade_notice": "You should upgrade because of reasons.",
   "requires": "4.7",
   "tested": "5.5.1",
   "banners": {
@@ -16,11 +16,11 @@
     "high": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-1544x500.jpg"
   },
   "author": "Prykon",
-  "author_homepage": "https://disciple.tools",
-  "homepage": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template",
-  "issues_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/issues",
-  "projects_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/projects",
-  "wiki_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/wiki",
-  "license_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/blob/master/LICENSE",
-  "readme_url": "https://github.com/DiscipleTools/disciple-tools-availability-plugin-template/blob/master/README.md"
+  "author_homepage": "https://github.com/prykon",
+  "homepage": "https://github.com/prykon/disciple-tools-availability-plugin-template",
+  "issues_url": "https://github.com/prykon/disciple-tools-availability-plugin-template/issues",
+  "projects_url": "https://github.com/prykon/disciple-tools-availability-plugin-template/projects",
+  "wiki_url": "https://github.com/prykon/disciple-tools-availability-plugin-template/wiki",
+  "license_url": "https://github.com/prykon/disciple-tools-availability-plugin-template/blob/master/LICENSE",
+  "readme_url": "https://github.com/prykon/disciple-tools-availability-plugin-template/blob/master/README.md"
 }
