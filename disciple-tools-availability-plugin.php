@@ -281,7 +281,7 @@ var columnTemplate = series.columns.template;
 columnTemplate.strokeWidth = 1;
 columnTemplate.strokeOpacity = 1;
 columnTemplate.stroke = '#a6a6a6';
-columnTemplate.tooltipHTML = "{weekday} {hour}: {value.workingValue.formatNumber('#.')} people\n {people}";
+columnTemplate.tooltipHTML = "<b>{weekday} {hour}</b><br><small>({value.workingValue.formatNumber('#.')} out of <?php echo count( $group['members']); ?> members available)</small>\n {people}";
 columnTemplate.width = am4core.percent(100);
 columnTemplate.height = am4core.percent(100);
 
