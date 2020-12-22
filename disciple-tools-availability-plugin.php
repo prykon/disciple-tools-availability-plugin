@@ -88,7 +88,7 @@ Class DT_contact_availability {
                 $options = [
                     "morning" => [ "label" => __( "morning", 'disciple_tools' ) ],
                     "noon" => [ "label" => __( "noon", 'disciple_tools' ) ],
-                    "afternoon" => [ "label" => __( "afternoon", 'disciple_tools' ) ],
+                    "evening" => [ "label" => __( "evening", 'disciple_tools' ) ],
                     "night" => [ "label" => __( "night", 'disciple_tools' ) ],
                 ];
 
