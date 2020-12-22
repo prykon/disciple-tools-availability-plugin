@@ -5,3 +5,6 @@ Ever struggle with finding a timeslot for your group that everyone is ok with? W
 
 
 ### Screenshots
+<img src="https://imgur.com/skiRpfe" width="300">
+<img src="https://imgur.com/Wy9rPyv" width="300">
+<img src="https://imgur.com/22KMWP4" width="300">
