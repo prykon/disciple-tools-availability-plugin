@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Coaching Checklist
+ * Plugin Name: Disciple Tools - Availability Plugin
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-availability-plugin
- * Description: Coaching Checklist Inspired by Zume
+ * Description: Easily find the best timeslot for a group with many members.
  * Version:  0.1.0
- * Author URI: https://github.com/DiscipleTools
- * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-availability-plugin
+ * Author URI: https://github.com/prykon
+ * GitHub Plugin URI: https://github.com/prykon/dt-availability-plugin
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
  * Tested up to: 5.6
@@ -65,8 +65,11 @@ Class DT_contact_availability {
     }
 
     private function plugin_hooks(){
+        
         add_filter( 'dt_details_additional_tiles', 'dt_details_additional_tiles', 10, 2 );
+        
         function dt_details_additional_tiles( $tiles, $post_type = "" ) {
+            
             if ( $post_type === "contacts" ) {
                 $tiles["contact_availability"] = [ "label" => __( "Availability", 'disciple_tools' ) ];
             }
@@ -77,7 +80,9 @@ Class DT_contact_availability {
             return $tiles;
         }
 
+
         add_filter( "dt_custom_fields_settings", "dt_contact_fields", 1, 2 );
+        
         function dt_contact_fields( array $fields, string $post_type = "") {
             if ( $post_type === "contacts" ) {
                 $options = [
@@ -113,7 +118,7 @@ Class DT_contact_availability {
 
         add_action( "dt_details_additional_section", "dt_add_section", 30, 2 );
         
-        /** Gets availability for member*/
+        /** Gets availability for a specific member */
         function get_member_availability( int $member_id, string $member_name ) {
             global $wpdb;
 
@@ -159,7 +164,6 @@ Class DT_contact_availability {
                     if ( isset( $field_options["tile"] ) && $field_options["tile"] === "contact_availability" ) :
                         $post_fields[$field_key]["hidden"] = false;
                         $post_fields[$field_key]["custom_display"] = false;
-
                         ?>
                         <div style="display: flex">
                             <div style="flex-grow: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
@@ -271,9 +275,6 @@ series.dataFields.people = "people";
 series.sequencedInterpolation = true;
 series.defaultState.transitionDuration = 3000;
 
-
-
-
 var bgColor = new am4core.InterfaceColorSet().getFor("background");
 
 var columnTemplate = series.columns.template;
@@ -322,10 +323,12 @@ series.columns.template.events.on("out", function(event) {
 
 chart.data = [
 <?php
+
 $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 $timeframe = ['morning', 'noon', 'evening', 'night'];
 $availabilities = [];
 $i = 0;
+
 foreach($weekdays as $day){
   foreach($timeframe as $time):?>
     <?php
