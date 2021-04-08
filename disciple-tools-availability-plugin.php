@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Availability Plugin
+ * Plugin Name: Disciple Tools - Availability
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-availability-plugin
  * Description: Easily find the best timeslot for a group with many members.
  * Version:  1.0
