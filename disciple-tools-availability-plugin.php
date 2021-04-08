@@ -3,7 +3,7 @@
  * Plugin Name: Disciple Tools - Availability Plugin
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-availability-plugin
  * Description: Easily find the best timeslot for a group with many members.
- * Version:  0.1.0
+ * Version:  1.0
  * Author URI: https://github.com/prykon
  * GitHub Plugin URI: https://github.com/prykon/dt-availability-plugin
  * Requires at least: 4.7.0

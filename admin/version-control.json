@@ -1,9 +1,9 @@
 {
   "name": "Disciple Tools - Availability Plugin",
-  "version": "0.1.0",
+  "version": "1.0",
   "download_url": "https://github.com/prykon/dt-availability-plugin/archive/master.zip",
   "sections": {
-    "description": "Disciple Tools - Availability Plugin.",
+    "description": "Easily find the best timeslot for a group with many members.",
     "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
     "changelog": ""
   },
