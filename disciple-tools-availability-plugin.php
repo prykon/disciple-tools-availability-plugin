@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'after_setup_theme', function (){
-  new DT_contact_availability();
+    new DT_Contact_Availability();
 });
 
-Class DT_contact_availability {
+class DT_Contact_Availability {
     public static $required_dt_theme_version = '1.0.0';
     public static $rest_namespace = null; //use if you have custom rest endpoints on this plugin
     public static $plugin_name = "Availability";
@@ -56,33 +56,29 @@ Class DT_contact_availability {
          * This restricts endpoints defined in this plugin this namespace
          */
 //        require_once( 'includes/dt-hooks.php' );
-        $is_rest = dt_is_rest();
-        if ( !$is_rest || strpos( dt_get_url_path(), self::$rest_namespace ) !== false ){
-          //call functions
-        }
-        
+
         $this->plugin_hooks();
     }
 
     private function plugin_hooks(){
-        
+
         add_filter( 'dt_details_additional_tiles', 'dt_details_additional_tiles', 10, 2 );
-        
+
         function dt_details_additional_tiles( $tiles, $post_type = "" ) {
-            
+
             if ( $post_type === "contacts" ) {
                 $tiles["contact_availability"] = [ "label" => __( "Availability", 'disciple_tools' ) ];
             }
 
             if ( $post_type === "groups" ) {
-                $tiles["group_availability"] = ["label" => __( "Group availability", 'disciple_tools' ) ];
+                $tiles["group_availability"] = [ "label" => __( "Group availability", 'disciple_tools' ) ];
             }
             return $tiles;
         }
 
 
         add_filter( "dt_custom_fields_settings", "dt_contact_fields", 1, 2 );
-        
+
         function dt_contact_fields( array $fields, string $post_type = "") {
             if ( $post_type === "contacts" ) {
                 $options = [
@@ -117,7 +113,7 @@ Class DT_contact_availability {
         }
 
         add_action( "dt_details_additional_section", "dt_add_section", 30, 2 );
-        
+
         /** Gets availability for a specific member */
         function get_member_availability( int $member_id, string $member_name ) {
             global $wpdb;
@@ -130,16 +126,16 @@ Class DT_contact_availability {
 
             $member_availability = [];
 
-            foreach( $results as $key => $value ) {
+            foreach ( $results as $key => $value ) {
                 if ( $value != '' ) {
-                    $timeslot = str_replace('contact_availability_', '', $value['meta_key'] ) . '_' . $value['meta_value'];
+                    $timeslot = str_replace( 'contact_availability_', '', $value['meta_key'] ) . '_' . $value['meta_value'];
                     $member_availability[$key]['timeslot'] = $timeslot;
                     $member_availability[$key]['post_title'] = $member_name;
                 }
             }
-            
+
             return $member_availability;
-        }    
+        }
 
 
         function dt_add_section( $section, $post_type ) {
@@ -154,8 +150,8 @@ Class DT_contact_availability {
                 foreach ($post_fields as $field_key => $field_options ) {
                     if ( isset( $field_options["tile"] ) && $field_options["tile"] === "contact_availability" ) {
                         $total += sizeof( $field_options["default"] );
-                        if ( isset( $post[$field_key])){
-                          $total_done += sizeof( $post[$field_key]);
+                        if ( isset( $post[$field_key] ) ) {
+                            $total_done += sizeof( $post[$field_key] );
                         }
                     }
                 }
@@ -183,9 +179,9 @@ Class DT_contact_availability {
                                 </div>
                             </div>
                         </div>
-                        <?php endif;
-                    endforeach;
-                }
+                    <?php endif;
+                endforeach;
+            }
 
 
             /** Tile for groups page*/
@@ -196,7 +192,7 @@ Class DT_contact_availability {
                 /** Get group member data */
                 $group_members = [];
                 $availabilities_pretty = [];
-                foreach( $group['members'] as $key => $value ) {
+                foreach ( $group['members'] as $key => $value ) {
 
                     /** Get member id */
                     $group_members[$key]['ID'] = $value['ID'];
@@ -206,19 +202,19 @@ Class DT_contact_availability {
 
                     /** Get member availabilities */
                     $group_members[$key]['availability'] = get_member_availability( $value['ID'], $value['post_title'] );
-                    
+
                     /** Save availabilities to array */
                     foreach ( $group_members[$key]['availability'] as $ma) {
-                            if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
-                                $availabilities_pretty[ $ma['timeslot'] ] = "<li>". $ma['post_title'] . "</li>";                                
-                                $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
-                            } else {
-                                $availabilities_pretty[ $ma['timeslot'] ] .= "<li>" . $ma['post_title'] . "</li>";                                
-                                $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
-                            }
+                        if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
+                            $availabilities_pretty[ $ma['timeslot'] ] = "<li>". $ma['post_title'] . "</li>";
+                            $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
+                        } else {
+                            $availabilities_pretty[ $ma['timeslot'] ] .= "<li>" . $ma['post_title'] . "</li>";
+                            $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
+                        }
                     }
-                }       
-    ?>
+                }
+                ?>
 <div>
     <!-- Styles -->
 <style>
@@ -281,7 +277,7 @@ var columnTemplate = series.columns.template;
 columnTemplate.strokeWidth = 1;
 columnTemplate.strokeOpacity = 1;
 columnTemplate.stroke = '#a6a6a6';
-columnTemplate.tooltipHTML = "<b>{weekday} {hour}</b><br><small>({value.workingValue.formatNumber('#.')} out of <?php echo count( $group['members']); ?> members available)</small>\n {people}";
+columnTemplate.tooltipHTML = "<b>{weekday} {hour}</b><br><small>({value.workingValue.formatNumber('#.')} out of <?php echo count( $group['members'] ); ?> members available)</small>\n {people}";
 columnTemplate.width = am4core.percent(100);
 columnTemplate.height = am4core.percent(100);
 
@@ -322,36 +318,34 @@ series.columns.template.events.on("out", function(event) {
 })
 
 chart.data = [
-<?php
+                <?php
+                    $weekdays = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
+                    $timeframe = [ 'morning', 'noon', 'evening', 'night' ];
+                    $availabilities = [];
+                    $i = 0;
 
-$weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-$timeframe = ['morning', 'noon', 'evening', 'night'];
-$availabilities = [];
-$i = 0;
+                foreach ( $weekdays as $day ) {
+                    foreach ( $timeframe as $time ):
+                        $timeslot = strtolower( $day ) . "_" . $time;
+                        $timeslot_value = '';
+                        $timeslot_people = '';
 
-foreach($weekdays as $day){
-  foreach($timeframe as $time):
-        $timeslot = strtolower( $day ) . "_" . $time;
-        $timeslot_value = '';
-        $timeslot_people = '';
+                        if ( ! isset( $availabilities_pretty[ $timeslot . '_count' ] ) ) {
+                            $timeslot_value = 0;
+                        } else {
+                            $timeslot_value = 0 + $availabilities_pretty[ $timeslot . '_count' ];
+                        }
 
-        if ( ! isset( $availabilities_pretty[ $timeslot . '_count' ] ) ) {
-            $timeslot_value = 0;
-        } else {
-            $timeslot_value = 0 + $availabilities_pretty[ $timeslot . '_count' ];
-        }
-
-        if ( ! isset( $availabilities_pretty[ $timeslot ] ) ) {
-            $timeslot_people = '';
-        } else {
-            $timeslot_people = $availabilities_pretty[ $timeslot ];
-        }
-
-    ?>
+                        if ( ! isset( $availabilities_pretty[ $timeslot ] ) ) {
+                            $timeslot_people = '';
+                        } else {
+                            $timeslot_people = $availabilities_pretty[ $timeslot ];
+                        }
+                        ?>
     {
-    "hour": '<?php echo $time;?>',
-    "weekday": '<?php echo $day;?>',
-    "value": <?php echo $timeslot_value; ?>,
+    "hour": '<?php echo esc_html( $time );?>',
+    "weekday": '<?php echo esc_html( $day );?>',
+    "value": <?php echo esc_html( $timeslot_value ); ?>,
     "people": '<?php echo $timeslot_people; ?>',
     },
 <?php endforeach;} ?>
@@ -361,12 +355,13 @@ foreach($weekdays as $day){
 </script>
 
 <!-- HTML -->
-<div id="chartdiv"></div></div><?php
-                }
+<div id="chartdiv"></div></div>
+                <?php
             }
         }
+    }
 
-    function dt_plugin_hook_admin_notice() {
+    public function dt_plugin_hook_admin_notice() {
         $wp_theme = wp_get_theme();
         $current_version = $wp_theme->version;
         $message = __( "'Disciple Tools - " . self::$plugin_name . "' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version.", "dt_plugin" );
