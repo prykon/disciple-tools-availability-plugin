@@ -209,15 +209,15 @@ Class DT_contact_availability {
                     
                     /** Save availabilities to array */
                     foreach ( $group_members[$key]['availability'] as $ma) {
-                            if (empty($availabilities_pretty[$ma['timeslot']])){
-                                $availabilities_pretty[$ma['timeslot']] = "<li>". $ma['post_title'] . "</li>";                                
-                                $availabilities_pretty[$ma['timeslot'].'_count'] = 1;
+                            if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
+                                $availabilities_pretty[ $ma['timeslot'] ] = "<li>". $ma['post_title'] . "</li>";                                
+                                $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
                             } else {
-                                $availabilities_pretty[$ma['timeslot']] .= "<li>" . $ma['post_title'] . "</li>";                                
-                                $availabilities_pretty[$ma['timeslot'].'_count'] ++;
+                                $availabilities_pretty[ $ma['timeslot'] ] .= "<li>" . $ma['post_title'] . "</li>";                                
+                                $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
                             }
                     }
-                }                
+                }       
     ?>
 <div>
     <!-- Styles -->
@@ -330,15 +330,29 @@ $availabilities = [];
 $i = 0;
 
 foreach($weekdays as $day){
-  foreach($timeframe as $time):?>
-    <?php
-        $timeslot = strtolower( str_replace('contact_availability_', '', $day ) . "_" . $time );
+  foreach($timeframe as $time):
+        $timeslot = strtolower( $day ) . "_" . $time;
+        $timeslot_value = '';
+        $timeslot_people = '';
+
+        if ( ! isset( $availabilities_pretty[ $timeslot . '_count' ] ) ) {
+            $timeslot_value = 0;
+        } else {
+            $timeslot_value = 0 + $availabilities_pretty[ $timeslot . '_count' ];
+        }
+
+        if ( ! isset( $availabilities_pretty[ $timeslot ] ) ) {
+            $timeslot_people = '';
+        } else {
+            $timeslot_people = $availabilities_pretty[ $timeslot ];
+        }
+
     ?>
     {
     "hour": '<?php echo $time;?>',
     "weekday": '<?php echo $day;?>',
-    "value": <?php echo 0 + $availabilities_pretty[$timeslot.'_count']; ?>,
-    "people": '<?php echo $availabilities_pretty[$timeslot]; ?>',
+    "value": <?php echo $timeslot_value; ?>,
+    "people": '<?php echo $timeslot_people; ?>',
     },
 <?php endforeach;} ?>
 ];
