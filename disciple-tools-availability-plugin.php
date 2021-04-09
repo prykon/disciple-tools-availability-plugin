@@ -206,10 +206,10 @@ class DT_Contact_Availability {
                     /** Save availabilities to array */
                     foreach ( $group_members[$key]['availability'] as $ma) {
                         if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
-                            $availabilities_pretty[ $ma['timeslot'] ] = "<li>". $ma['post_title'] . "</li>";
+                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
                             $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
                         } else {
-                            $availabilities_pretty[ $ma['timeslot'] ] .= "<li>" . $ma['post_title'] . "</li>";
+                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
                             $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
                         }
                     }
@@ -328,7 +328,7 @@ chart.data = [
                     foreach ( $timeframe as $time ):
                         $timeslot = strtolower( $day ) . "_" . $time;
                         $timeslot_value = '';
-                        $timeslot_people = '';
+                        $timeslot_people = [];
 
                         if ( ! isset( $availabilities_pretty[ $timeslot . '_count' ] ) ) {
                             $timeslot_value = 0;
@@ -337,7 +337,7 @@ chart.data = [
                         }
 
                         if ( ! isset( $availabilities_pretty[ $timeslot ] ) ) {
-                            $timeslot_people = '';
+                            $timeslot_people = [];
                         } else {
                             $timeslot_people = $availabilities_pretty[ $timeslot ];
                         }
@@ -346,7 +346,11 @@ chart.data = [
     "hour": '<?php echo esc_html( $time );?>',
     "weekday": '<?php echo esc_html( $day );?>',
     "value": <?php echo esc_html( $timeslot_value ); ?>,
-    "people": '<?php echo $timeslot_people; ?>',
+    "people": '<?php
+    foreach ( $timeslot_people as $tp ) {
+        echo '<li>' . esc_html( $tp ) . '</li>';
+    }
+    ?>',
     },
 <?php endforeach;} ?>
 ];
@@ -364,7 +368,7 @@ chart.data = [
     public function dt_plugin_hook_admin_notice() {
         $wp_theme = wp_get_theme();
         $current_version = $wp_theme->version;
-        $message = __( "'Disciple Tools - " . self::$plugin_name . "' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version.", "dt_plugin" );
+        $message = "'Disciple Tools - Availability' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version.";
         if ( strpos( $wp_theme->get_template(), "disciple-tools-theme" ) !== false || $wp_theme->name === "Disciple Tools" ) {
             $message .= sprintf( esc_html__( 'Current Disciple Tools version: %1$s, required version: %2$s', 'dt_plugin' ), esc_html( $current_version ), esc_html( self::$required_dt_theme_version ) );
         }
