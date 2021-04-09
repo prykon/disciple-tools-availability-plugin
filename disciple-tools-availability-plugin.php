@@ -29,6 +29,12 @@ class DT_Contact_Availability {
     public static $rest_namespace = null; //use if you have custom rest endpoints on this plugin
     public static $plugin_name = "Availability";
 
+    public function scripts() {
+            wp_enqueue_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
+            wp_enqueue_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
+            wp_enqueue_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', [ 'amcharts-core' ], '4' );
+    }
+
     public function __construct() {
         $wp_theme = wp_get_theme();
         $version = $wp_theme->version;
@@ -113,6 +119,7 @@ class DT_Contact_Availability {
         }
 
         add_action( "dt_details_additional_section", "dt_add_section", 30, 2 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
 
         /** Gets availability for a specific member */
         function get_member_availability( int $member_id, string $member_name ) {
@@ -121,8 +128,9 @@ class DT_Contact_Availability {
             $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT meta_key, meta_value
                 FROM $wpdb->postmeta
-                WHERE meta_key LIKE 'contact_availability_%'
-                AND post_id = %s;", $member_id ), ARRAY_A );
+                WHERE meta_key LIKE %s
+                AND post_id = %s;",
+            'contact_availability_%', $member_id ), ARRAY_A );
 
             $member_availability = [];
 
@@ -136,7 +144,6 @@ class DT_Contact_Availability {
 
             return $member_availability;
         }
-
 
         function dt_add_section( $section, $post_type ) {
 
@@ -183,7 +190,6 @@ class DT_Contact_Availability {
                 endforeach;
             }
 
-
             /** Tile for groups page*/
             if ( $section === "group_availability" && $post_type === "groups" ) {
                 /** Get all group data */
@@ -224,11 +230,6 @@ class DT_Contact_Availability {
 }
 
 </style>
-
-<!-- Resources -->
-<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
 <!-- Chart code -->
 <script>
