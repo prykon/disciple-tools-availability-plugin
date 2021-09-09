@@ -1,0 +1,31 @@
+{
+
+  "name": "Disciple Tools - Availability",
+  "version": "1.1",
+  "last_updated": "2021-04",
+  "author": "prykon",
+  "author_homepage": "https://github.com/prykon",
+  "git_owner": "prykon",
+  "git_repo": "disciple-tools-availability-plugin",
+  "download_url": "https://github.com/prykon/disciple-tools-availability-plugin/releases/latest/download/disciple-tools-availability-plugin.zip",
+  "homepage": "https://github.com/prykon/disciple-tools-availability-plugin",
+  "issues_url": "https://github.com/prykon/disciple-tools-availability-plugin/issues",
+  "projects_url": "https://github.com/prykon/disciple-tools-availability-plugin/projects/1",
+  "discussions_url": "https://github.com/prykon/disciple-tools-availability-plugin/discussions",
+  "wiki_url": "https://github.com/prykon/disciple-tools-availability-plugin/wiki",
+  "license_url": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/LICENSE",
+  "readme_url": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/README.md",
+  "requires": "4.7",
+  "tested": "5.6.1",
+  "upgrade_notice": "Here's why you should upgrade...",
+  "banners": {
+    "low": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-772x250.jpg",
+    "high": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-1544x500.jpg"
+  },
+  "icon": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/assets/logo.png",
+  "sections": {
+    "description": "Easily set each group member's availability and see the time slot with the most amount of overlap for group meetings.",
+    "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
+    "changelog": ""
+  }
+}
