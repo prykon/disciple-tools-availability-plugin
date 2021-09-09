@@ -17,15 +17,15 @@
   "readme_url": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/README.md",
   "requires": "4.7",
   "tested": "5.6.1",
-  "upgrade_notice": "Here's why you should upgrade...",
+  "upgrade_notice": "You should upgrade because of reasons.",
   "banners": {
     "low": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-772x250.jpg",
-    "high": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-1544x500.jpg"
+    "high": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/assets/availability-plugin-banner.png"
   },
   "icon": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/assets/logo.png",
   "sections": {
     "description": "Easily set each group member's availability and see the time slot with the most amount of overlap for group meetings.",
     "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
-    "changelog": ""
+    "changelog": "Streamlined version-control.json and added plugin logo."
   }
 }
