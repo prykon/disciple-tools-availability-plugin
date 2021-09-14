@@ -19,7 +19,7 @@
   "tested": "5.6.1",
   "upgrade_notice": "You should upgrade because of reasons.",
   "banners": {
-    "low": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/images/dt-placeholder-772x250.jpg",
+    "low": "https://raw.githubusercontent.com/DiscipleTools/disciple-tools-plugin-starter-template/master/documentation/banner.png",
     "high": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/assets/availability-plugin-banner.png"
   },
   "icon": "https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/assets/logo.png",
