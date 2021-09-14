@@ -1,7 +1,7 @@
 {
 
   "name": "Disciple Tools - Availability",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "last_updated": "2021-09",
   "author": "prykon",
   "author_homepage": "https://github.com/prykon",
@@ -26,6 +26,6 @@
   "sections": {
     "description": "Easily set each group member's availability and see the time slot with the most amount of overlap for group meetings.",
     "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
-    "changelog": "Streamlined version-control.json and added plugin logo."
+    "changelog": "Fixed a URL that triggered an error on multisites."
   }
 }
