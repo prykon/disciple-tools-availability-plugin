@@ -430,7 +430,7 @@ add_action( 'plugins_loaded', function (){
         }
         if ( class_exists( 'Puc_v4_Factory' ) ){
             Puc_v4_Factory::buildUpdateChecker(
-                'https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/admin/version-control.json',
+                'https://raw.githubusercontent.com/prykon/disciple-tools-availability-plugin/master/version-control.json',
                 __FILE__,
                 'disciple-tools-availability-plugin'
             );
