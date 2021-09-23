@@ -1,4 +1,4 @@
-# Disciple Tools Availability Plugin
+# Disciple.Tools Availability Plugin
 Ever struggle with finding a time slot for your group that everyone is ok with? With the DT Availability Plugin you can easily set each group member availability and see the time slot with the most amount of overlap.
 
 
