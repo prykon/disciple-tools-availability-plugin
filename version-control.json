@@ -1,8 +1,8 @@
 {
 
   "name": "Disciple.Tools - Availability",
-  "version": "1.1.3",
-  "last_updated": "2021-10",
+  "version": "1.1.4",
+  "last_updated": "2023-05",
   "author": "prykon",
   "author_homepage": "https://github.com/prykon",
   "git_owner": "prykon",
@@ -26,6 +26,6 @@
   "sections": {
     "description": "Easily set each group member's availability and see the time slot with the most amount of overlap for group meetings.",
     "installation": "(Required) You must have Disciple.Tools Theme installed before using this plugin. Once Disciple.Tools is installed, you can use the normal Plugin system to install the plugin.",
-    "changelog": "Updated wording and cleaned up irrelevant files."
+    "changelog": "Fixed 'tile input not being saved' bug"
   }
 }
