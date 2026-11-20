@@ -133,12 +133,15 @@ class DT_Contact_Availability {
             'contact_availability_%', $member_id ), ARRAY_A );
 
             $member_availability = [];
+            $days = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
+            $times = [ 'morning', 'noon', 'evening', 'night' ];
 
             foreach ( $results as $key => $value ) {
-                if ( $value != '' ) {
-                    $timeslot = str_replace( 'contact_availability_', '', $value['meta_key'] ) . '_' . $value['meta_value'];
-                    $member_availability[$key]['timeslot'] = $timeslot;
-                    $member_availability[$key]['post_title'] = $member_name;
+                $day = str_replace( 'contact_availability_', '', $value['meta_key'] );
+                if ( in_array( $day, $days, true ) && in_array( $value['meta_value'], $times, true ) ) {
+                    $timeslot = $day . '_' . $value['meta_value'];
+                    $member_availability[$timeslot]['timeslot'] = $timeslot;
+                    $member_availability[$timeslot]['post_title'] = $member_name;
                 }
             }
 
