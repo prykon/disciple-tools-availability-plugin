@@ -30,9 +30,27 @@ class DT_Contact_Availability {
     public static $plugin_name = "Availability";
 
     public function scripts() {
-            wp_enqueue_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
-            wp_enqueue_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
-            wp_enqueue_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', [ 'amcharts-core' ], '4' );
+        if ( !is_singular( 'groups' ) ) {
+            return;
+        }
+        $amcharts_url = 'https://cdn.amcharts.com/lib/version/4.10.40/';
+        wp_enqueue_script( 'dt-availability-amcharts-core', $amcharts_url . 'core.js', [], '4.10.40' );
+        wp_enqueue_script( 'dt-availability-amcharts-charts', $amcharts_url . 'charts.js', [ 'dt-availability-amcharts-core' ], '4.10.40' );
+        wp_enqueue_script( 'dt-availability-amcharts-animated', $amcharts_url . 'themes/animated.js', [ 'dt-availability-amcharts-core' ], '4.10.40' );
+    }
+
+    /** Adds Subresource Integrity hashes of the amCharts 4.10.40 files */
+    public function amcharts_integrity( $attributes ) {
+        $hashes = [
+            'dt-availability-amcharts-core-js' => 'sha384-ordGF512qZ28dR6Fu0XRiEDmJ2hlTRqB4CUbHADX01rzXhP7hfuURgnA83jHsPAu',
+            'dt-availability-amcharts-charts-js' => 'sha384-IrVbZoOciaDw6EuKzbIx3dkSw3QyUm/YyYS2Q6GUGXOyZkDoaqZNOuwDpopQymF8',
+            'dt-availability-amcharts-animated-js' => 'sha384-50bHMQnvdDZTCzEAXttOJXnmLXdJbzKx5ERCSfx+a4I6zyCcNNrnEaTbdNqyGaAI',
+        ];
+        if ( isset( $attributes['id'] ) && isset( $hashes[ $attributes['id'] ] ) ) {
+            $attributes['integrity'] = $hashes[ $attributes['id'] ];
+            $attributes['crossorigin'] = 'anonymous';
+        }
+        return $attributes;
     }
 
     public function __construct() {
@@ -120,6 +138,7 @@ class DT_Contact_Availability {
 
         add_action( "dt_details_additional_section", "dt_add_section", 30, 2 );
         add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+        add_filter( 'wp_script_attributes', [ $this, 'amcharts_integrity' ] );
 
         /** Gets availability for a specific member */
         function get_member_availability( int $member_id, string $member_name ) {
