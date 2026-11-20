@@ -30,9 +30,27 @@ class DT_Contact_Availability {
     public static $plugin_name = "Availability";
 
     public function scripts() {
-            wp_enqueue_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
-            wp_enqueue_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
-            wp_enqueue_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', [ 'amcharts-core' ], '4' );
+        if ( !is_singular( 'groups' ) ) {
+            return;
+        }
+        $amcharts_url = 'https://cdn.amcharts.com/lib/version/4.10.40/';
+        wp_enqueue_script( 'dt-availability-amcharts-core', $amcharts_url . 'core.js', [], '4.10.40' );
+        wp_enqueue_script( 'dt-availability-amcharts-charts', $amcharts_url . 'charts.js', [ 'dt-availability-amcharts-core' ], '4.10.40' );
+        wp_enqueue_script( 'dt-availability-amcharts-animated', $amcharts_url . 'themes/animated.js', [ 'dt-availability-amcharts-core' ], '4.10.40' );
+    }
+
+    /** Adds Subresource Integrity hashes of the amCharts 4.10.40 files */
+    public function amcharts_integrity( $attributes ) {
+        $hashes = [
+            'dt-availability-amcharts-core-js' => 'sha384-ordGF512qZ28dR6Fu0XRiEDmJ2hlTRqB4CUbHADX01rzXhP7hfuURgnA83jHsPAu',
+            'dt-availability-amcharts-charts-js' => 'sha384-IrVbZoOciaDw6EuKzbIx3dkSw3QyUm/YyYS2Q6GUGXOyZkDoaqZNOuwDpopQymF8',
+            'dt-availability-amcharts-animated-js' => 'sha384-50bHMQnvdDZTCzEAXttOJXnmLXdJbzKx5ERCSfx+a4I6zyCcNNrnEaTbdNqyGaAI',
+        ];
+        if ( isset( $attributes['id'] ) && isset( $hashes[ $attributes['id'] ] ) ) {
+            $attributes['integrity'] = $hashes[ $attributes['id'] ];
+            $attributes['crossorigin'] = 'anonymous';
+        }
+        return $attributes;
     }
 
     public function __construct() {
@@ -120,6 +138,7 @@ class DT_Contact_Availability {
 
         add_action( "dt_details_additional_section", "dt_add_section", 30, 2 );
         add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+        add_filter( 'wp_script_attributes', [ $this, 'amcharts_integrity' ] );
 
         /** Gets availability for a specific member */
         function get_member_availability( int $member_id, string $member_name ) {
@@ -133,12 +152,15 @@ class DT_Contact_Availability {
             'contact_availability_%', $member_id ), ARRAY_A );
 
             $member_availability = [];
+            $days = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
+            $times = [ 'morning', 'noon', 'evening', 'night' ];
 
             foreach ( $results as $key => $value ) {
-                if ( $value != '' ) {
-                    $timeslot = str_replace( 'contact_availability_', '', $value['meta_key'] ) . '_' . $value['meta_value'];
-                    $member_availability[$key]['timeslot'] = $timeslot;
-                    $member_availability[$key]['post_title'] = $member_name;
+                $day = str_replace( 'contact_availability_', '', $value['meta_key'] );
+                if ( in_array( $day, $days, true ) && in_array( $value['meta_value'], $times, true ) ) {
+                    $timeslot = $day . '_' . $value['meta_value'];
+                    $member_availability[$timeslot]['timeslot'] = $timeslot;
+                    $member_availability[$timeslot]['post_title'] = $member_name;
                 }
             }
 
@@ -206,18 +228,20 @@ class DT_Contact_Availability {
                     /** Get member name */
                     $group_members[$key]['post_title'] = $value['post_title'];
 
-                    /** Get member availabilities */
-                    $group_members[$key]['availability'] = get_member_availability( $value['ID'], $value['post_title'] );
+                    /** Get member availabilities; members the viewer can't view are counted without their name */
+                    $member_name = DT_Posts::can_view( 'contacts', (int) $value['ID'] ) ? $value['post_title'] : '';
+                    $group_members[$key]['availability'] = get_member_availability( $value['ID'], $member_name );
 
                     /** Save availabilities to array */
                     foreach ( $group_members[$key]['availability'] as $ma) {
-                        if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
-                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
-                            $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
-                        } else {
-                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
-                            $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
+                        if ( ! isset( $availabilities_pretty[ $ma['timeslot'] . '_count' ] ) ) {
+                            $availabilities_pretty[ $ma['timeslot'] ] = [];
+                            $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 0;
                         }
+                        if ( $ma['post_title'] !== '' ) {
+                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
+                        }
+                        $availabilities_pretty[ $ma['timeslot'] . '_count' ]++;
                     }
                 }
                 ?>
@@ -318,12 +342,13 @@ series.columns.template.events.on("out", function(event) {
   heatLegend.valueAxis.hideTooltip();
 })
 
-chart.data = [
+chart.data =
                 <?php
                     $weekdays = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
                     $timeframe = [ 'morning', 'noon', 'evening', 'night' ];
                     $availabilities = [];
                     $i = 0;
+                    $chart_data = [];
 
                 foreach ( $weekdays as $day ) {
                     foreach ( $timeframe as $time ):
@@ -342,19 +367,21 @@ chart.data = [
                         } else {
                             $timeslot_people = $availabilities_pretty[ $timeslot ];
                         }
-                        ?>
-    {
-    "hour": '<?php echo esc_html( $time );?>',
-    "weekday": '<?php echo esc_html( $day );?>',
-    "value": <?php echo esc_html( $timeslot_value ); ?>,
-    "people": '<?php
-    foreach ( $timeslot_people as $tp ) {
-        echo '<li>' . esc_html( $tp ) . '</li>';
-    }
-    ?>',
-    },
-<?php endforeach;} ?>
-];
+
+                        $people_html = '';
+                        foreach ( $timeslot_people as $tp ) {
+                            $people_html .= '<li>' . esc_html( $tp ) . '</li>';
+                        }
+                        $chart_data[] = [
+                            'hour' => $time,
+                            'weekday' => $day,
+                            'value' => $timeslot_value,
+                            'people' => $people_html,
+                        ];
+                    endforeach;
+                }
+                echo wp_json_encode( $chart_data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
+                ?>;
 
 }); // end am4core.ready()
 </script>
