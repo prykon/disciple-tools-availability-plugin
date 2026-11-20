@@ -209,18 +209,20 @@ class DT_Contact_Availability {
                     /** Get member name */
                     $group_members[$key]['post_title'] = $value['post_title'];
 
-                    /** Get member availabilities */
-                    $group_members[$key]['availability'] = get_member_availability( $value['ID'], $value['post_title'] );
+                    /** Get member availabilities; members the viewer can't view are counted without their name */
+                    $member_name = DT_Posts::can_view( 'contacts', (int) $value['ID'] ) ? $value['post_title'] : '';
+                    $group_members[$key]['availability'] = get_member_availability( $value['ID'], $member_name );
 
                     /** Save availabilities to array */
                     foreach ( $group_members[$key]['availability'] as $ma) {
-                        if ( empty( $availabilities_pretty[ $ma['timeslot'] ] ) ) {
-                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
-                            $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 1;
-                        } else {
-                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
-                            $availabilities_pretty[ $ma['timeslot'] . '_count'] ++;
+                        if ( ! isset( $availabilities_pretty[ $ma['timeslot'] . '_count' ] ) ) {
+                            $availabilities_pretty[ $ma['timeslot'] ] = [];
+                            $availabilities_pretty[ $ma['timeslot'] . '_count' ] = 0;
                         }
+                        if ( $ma['post_title'] !== '' ) {
+                            $availabilities_pretty[ $ma['timeslot'] ][] = $ma['post_title'];
+                        }
+                        $availabilities_pretty[ $ma['timeslot'] . '_count' ]++;
                     }
                 }
                 ?>
