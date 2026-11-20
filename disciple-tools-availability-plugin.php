@@ -318,12 +318,13 @@ series.columns.template.events.on("out", function(event) {
   heatLegend.valueAxis.hideTooltip();
 })
 
-chart.data = [
+chart.data =
                 <?php
                     $weekdays = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
                     $timeframe = [ 'morning', 'noon', 'evening', 'night' ];
                     $availabilities = [];
                     $i = 0;
+                    $chart_data = [];
 
                 foreach ( $weekdays as $day ) {
                     foreach ( $timeframe as $time ):
@@ -342,19 +343,21 @@ chart.data = [
                         } else {
                             $timeslot_people = $availabilities_pretty[ $timeslot ];
                         }
-                        ?>
-    {
-    "hour": '<?php echo esc_html( $time );?>',
-    "weekday": '<?php echo esc_html( $day );?>',
-    "value": <?php echo esc_html( $timeslot_value ); ?>,
-    "people": '<?php
-    foreach ( $timeslot_people as $tp ) {
-        echo '<li>' . esc_html( $tp ) . '</li>';
-    }
-    ?>',
-    },
-<?php endforeach;} ?>
-];
+
+                        $people_html = '';
+                        foreach ( $timeslot_people as $tp ) {
+                            $people_html .= '<li>' . esc_html( $tp ) . '</li>';
+                        }
+                        $chart_data[] = [
+                            'hour' => $time,
+                            'weekday' => $day,
+                            'value' => $timeslot_value,
+                            'people' => $people_html,
+                        ];
+                    endforeach;
+                }
+                echo wp_json_encode( $chart_data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
+                ?>;
 
 }); // end am4core.ready()
 </script>
